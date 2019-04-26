@@ -6,13 +6,15 @@ class UserModel(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80))
+    email = db.Column(db.String(80))
     password = db.Column(db.String(80))
     wins = db.Column(db.Integer)
     losses = db.Column(db.Integer)
 
     # Initialize user model
-    def __init__(self, username, password, wins = 0, losses = 0):
+    def __init__(self, username, email, password, wins = 0, losses = 0):
         self.username = username
+        self.email = email
         self.password = password
         self.wins = wins
         self.losses = losses
@@ -21,12 +23,19 @@ class UserModel(db.Model):
     def json(self):
         return {
             "id": self.id,
-            'username': self.username
+            "username": self.username
+            "email": self.email
         }
 
+    # Find the user in the database by username
     @classmethod
     def find_by_username(cls, username):
         return cls.query.filter_by(username=username).first()
+
+    # Find the user in the database by email
+    @classmethod
+    def find_by_email(cls, email):
+        return cls.query.filter_by(email=email).first()
 
     # Find user in the database by id
     @classmethod
