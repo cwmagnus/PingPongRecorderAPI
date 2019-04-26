@@ -26,7 +26,7 @@ class Game(Resource):
     )
 
     @jwt_required
-    def post(self):
+    def post(self, _id):
         data = self.parser.parse_args()
         user_id = get_jwt_identity()
 
