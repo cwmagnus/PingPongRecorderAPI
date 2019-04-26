@@ -2,5 +2,11 @@
 env/
 venv/
 
+# Python cache files
+__pycache__/
+
 # VS Code folder
 .vscode/
+
+# Debug database
+data.db

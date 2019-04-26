@@ -11,9 +11,11 @@ class UserModel(db.Model):
     losses = db.Column(db.Integer)
 
     # Initialize user model
-    def __init__(self, username, password):
+    def __init__(self, username, password, wins = 0, losses = 0):
         self.username = username
         self.password = password
+        self.wins = wins
+        self.losses = losses
 
     # Return the json formatted user
     def json(self):
