@@ -6,13 +6,14 @@ from flask_jwt_extended import JWTManager
 
 from db import db
 from blacklist import BLACKLIST
+from resources.user import UserRegister, UserLogin, TokenRefresh, UserLogout
 
 # Configure application and database
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("DATABASE_URL", "sqlite:///data.db")
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config["PROPAGATE_EXCEPTIONS"] = True
-app.config["DEBUG"] = os.environ.get("DEBUG_APP", True)
+app.config["DEBUG"] = False
 api = Api(app)
 
 # Configure jwt
@@ -71,7 +72,11 @@ def revoked_token_callback():
 def create_tables():
     db.create_all()
 
-# TODO: Register endpoints
+# Register endpoints
+api.add_resource(UserRegister, '/register')
+api.add_resource(UserLogin, '/login')
+api.add_resource(TokenRefresh, '/refresh')
+api.add_resource(UserLogout, '/logout')
 
 # Run the api
 if __name__ == "__main__":

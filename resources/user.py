@@ -5,21 +5,36 @@ from models.user import UserModel
 from blacklist import BLACKLIST
 from passlib.hash import bcrypt
 
-# Set up request fields
-_user_parser = reqparse.RequestParser()
-_user_parser.add_argument(
+# Set up user register requests
+_user_register_parser = reqparse.RequestParser()
+_user_register_parser.add_argument(
     "username",
     type = str,
     required = True,
     help = "This field cannot be blank."
 )
-_user_parser.add_argument(
+_user_register_parser.add_argument(
     "email",
     type = str,
     required = True,
     help = "This field cannot be blank."
 )
-_user_parser.add_argument(
+_user_register_parser.add_argument(
+    "password",
+    type = str,
+    required = True,
+    help = "This field cannot be blank."
+)
+
+# Set up user login requests
+_user_login_parser = reqparse.RequestParser()
+_user_login_parser.add_argument(
+    "username",
+    type = str,
+    required = True,
+    help = "This field cannot be blank."
+)
+_user_login_parser.add_argument(
     "password",
     type = str,
     required = True,
@@ -29,7 +44,7 @@ _user_parser.add_argument(
 # Register a new user
 class UserRegister(Resource):
     def post(self):
-        data = _user_parser.parse_args()
+        data = _user_register_parser.parse_args()
 
         if UserModel.find_by_username(data["username"]):
             return {"message": "A user with that username already exists"}, 400
@@ -45,7 +60,7 @@ class UserRegister(Resource):
 # Login a user
 class UserLogin(Resource):
     def post(self):
-        data = _user_parser.parse_args()
+        data = _user_login_parser.parse_args()
 
         user = UserModel.find_by_username(data["username"])
 
