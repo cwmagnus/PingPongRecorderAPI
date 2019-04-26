@@ -6,7 +6,7 @@ from flask_jwt_extended import JWTManager
 
 from db import db
 from blacklist import BLACKLIST
-from resources.user import UserRegister, UserLogin, TokenRefresh, UserLogout
+from resources.user import *
 
 # Configure application and database
 app = Flask(__name__)
@@ -73,10 +73,11 @@ def create_tables():
     db.create_all()
 
 # Register endpoints
-api.add_resource(UserRegister, '/register')
-api.add_resource(UserLogin, '/login')
-api.add_resource(TokenRefresh, '/refresh')
-api.add_resource(UserLogout, '/logout')
+api.add_resource(UserRegister, "/register")
+api.add_resource(UserLogin, "/login")
+api.add_resource(TokenRefresh, "/refresh")
+api.add_resource(UserLogout, "/logout")
+api.add_resource(UserList, "/user-list")
 
 # Run the api
 if __name__ == "__main__":

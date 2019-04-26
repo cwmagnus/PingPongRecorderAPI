@@ -22,9 +22,9 @@ class UserModel(db.Model):
     # Return the json formatted user
     def json(self):
         return {
-            "id": self.id,
             "username": self.username,
-            "email": self.email
+            "wins": self.wins,
+            "losses": self.losses
         }
 
     # Find the user in the database by username
@@ -41,6 +41,11 @@ class UserModel(db.Model):
     @classmethod
     def find_by_id(cls, _id):
         return cls.query.filter_by(id=_id).first()
+
+    # Find all users in the database
+    @classmethod
+    def find_all(cls):
+        return cls.query.all()
 
     # Save user to database
     def save_to_db(self):

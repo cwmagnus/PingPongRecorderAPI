@@ -82,6 +82,13 @@ class UserLogout(Resource):
         BLACKLIST.add(jti)
         return {"message": "Successfully logged out"}, 200
 
+# List all users
+class UserList(Resource):
+    @jwt_required
+    def get(self):
+        users = [user.json() for user in UserModel.find_all()]
+        return {"users": users}, 200
+
 # Refresh the users access token
 class TokenRefresh(Resource):
     @jwt_refresh_token_required
