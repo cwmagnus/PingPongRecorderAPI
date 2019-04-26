@@ -7,6 +7,7 @@ from flask_jwt_extended import JWTManager
 from db import db
 from blacklist import BLACKLIST
 from resources.user import *
+from resources.game import *
 
 # Configure application and database
 app = Flask(__name__)
@@ -78,6 +79,8 @@ api.add_resource(UserLogin, "/login")
 api.add_resource(TokenRefresh, "/refresh")
 api.add_resource(UserLogout, "/logout")
 api.add_resource(UserList, "/user-list")
+api.add_resource(Game, "/game/<int:_id>")
+api.add_resource(GameList, "/games")
 
 # Run the api
 if __name__ == "__main__":

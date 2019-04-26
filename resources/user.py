@@ -5,46 +5,31 @@ from models.user import UserModel
 from blacklist import BLACKLIST
 from passlib.hash import bcrypt
 
-# Set up user register requests
-_user_register_parser = reqparse.RequestParser()
-_user_register_parser.add_argument(
-    "username",
-    type = str,
-    required = True,
-    help = "This field cannot be blank."
-)
-_user_register_parser.add_argument(
-    "email",
-    type = str,
-    required = True,
-    help = "This field cannot be blank."
-)
-_user_register_parser.add_argument(
-    "password",
-    type = str,
-    required = True,
-    help = "This field cannot be blank."
-)
-
-# Set up user login requests
-_user_login_parser = reqparse.RequestParser()
-_user_login_parser.add_argument(
-    "username",
-    type = str,
-    required = True,
-    help = "This field cannot be blank."
-)
-_user_login_parser.add_argument(
-    "password",
-    type = str,
-    required = True,
-    help = "This field cannot be blank."
-)
-
 # Register a new user
 class UserRegister(Resource):
+    # Set up parser
+    parser = reqparse.RequestParser()
+    parser.add_argument(
+        "username",
+        type = str,
+        required = True,
+        help = "This field cannot be blank."
+    )
+    parser.add_argument(
+        "email",
+        type = str,
+        required = True,
+        help = "This field cannot be blank."
+    )
+    parser.add_argument(
+        "password",
+        type = str,
+        required = True,
+        help = "This field cannot be blank."
+    )
+
     def post(self):
-        data = _user_register_parser.parse_args()
+        data = self.parser.parse_args()
 
         if UserModel.find_by_username(data["username"]):
             return {"message": "A user with that username already exists"}, 400
@@ -53,14 +38,33 @@ class UserRegister(Resource):
             return {"message": "A user with that email address already exists"}, 400
 
         user = UserModel(data["username"], data["email"], bcrypt.hash(data["password"]))
-        user.save_to_db()
+        
+        try:
+            user.save_to_db()
+        except:
+            return {"message", "An error occurred while creating this user."}, 500
 
         return {"message": "User created successfully."}, 201
 
 # Login a user
 class UserLogin(Resource):
+    # Set up parser
+    parser = reqparse.RequestParser()
+    parser.add_argument(
+        "username",
+        type = str,
+        required = True,
+        help = "This field cannot be blank."
+    )
+    parser.add_argument(
+        "password",
+        type = str,
+        required = True,
+        help = "This field cannot be blank."
+    )
+
     def post(self):
-        data = _user_login_parser.parse_args()
+        data = self.parser.parse_args()
 
         user = UserModel.find_by_username(data["username"])
 

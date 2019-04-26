@@ -2,7 +2,7 @@ from db import db
 
 # Game data model to store in database
 class GameModel(db.Model):
-    __tablename__ = "users"
+    __tablename__ = "games"
 
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer)
@@ -20,8 +20,6 @@ class GameModel(db.Model):
     # Return the json formatted game
     def json(self):
         return {
-            "id": self.id,
-            "user_id": self.user_id,
             "name": self.name,
             "user_score": self.user_score,
             "opponent_score": self.opponent_score
