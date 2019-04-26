@@ -79,7 +79,8 @@ api.add_resource(UserLogin, "/login")
 api.add_resource(TokenRefresh, "/refresh")
 api.add_resource(UserLogout, "/logout")
 api.add_resource(UserList, "/user-list")
-api.add_resource(Game, "/game/<int:_id>")
+api.add_resource(GameGet, "/game/<int:_id>")
+api.add_resource(GameRecord, "/game")
 api.add_resource(GameList, "/games")
 
 # Run the api

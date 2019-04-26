@@ -2,8 +2,8 @@ from flask_restful import Resource, reqparse
 from flask_jwt_extended import *
 from models.game import GameModel
 
-# Get or record a game
-class Game(Resource):
+# Record a game
+class GameRecord(Resource):
     # Set up parser
     parser = reqparse.RequestParser()
     parser.add_argument(
@@ -26,7 +26,7 @@ class Game(Resource):
     )
 
     @jwt_required
-    def post(self, _id):
+    def post(self):
         data = self.parser.parse_args()
         user_id = get_jwt_identity()
 
@@ -39,6 +39,8 @@ class Game(Resource):
 
         return {"message": "Game recorded successfully."}, 201
 
+# Get a game by id
+class GameGet(Resource):
     @jwt_required
     def get(self, _id):
         game = GameModel.find_by_id(_id)
