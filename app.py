@@ -9,12 +9,10 @@ from blacklist import BLACKLIST
 
 # Configure application and database
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'sqlite:///data.db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['PROPAGATE_EXCEPTIONS'] = True
-app.config['HOST'] = "localhost"
-app.config['PORT'] = 5000
-app.config['DEBUG'] = True
+app.config['DEBUG'] = os.environ.get("DEBUG_APP", True)
 api = Api(app)
 
 # Configure jwt
@@ -77,5 +75,12 @@ def create_tables():
 
 # Run the api
 if __name__ == '__main__':
+    from db import db
     db.init_app(app)
-    app.run(host = app.config['HOST'], port = app.config['PORT'], debug = app.config['DEBUG'])
+
+    if app.config['DEBUG']:
+        @app.before_first_request
+        def create_tables():
+            db.create_all()
+
+    app.run(port=5000)
