@@ -91,6 +91,7 @@ class UserList(Resource):
     @jwt_required
     def get(self):
         users = [user.json() for user in UserModel.find_all()]
+        users.sort(key=lambda x: x.wins)
         return {"users": users}, 200
 
 # Refresh the users access token

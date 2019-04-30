@@ -1,6 +1,7 @@
 from flask_restful import Resource, reqparse
 from flask_jwt_extended import *
 from models.game import GameModel
+from models.user import UserModel
 
 # Record a game
 class GameRecord(Resource):
@@ -31,6 +32,14 @@ class GameRecord(Resource):
         user_id = get_jwt_identity()
 
         game = GameModel(user_id, data["name"], data["user_score"], data["opponent_score"])
+        user = UserModel.find_by_id(user_id)
+        
+        if game.user_score > game.opponent_score:
+            user.wins += 1
+        else:
+            user.losses += 1
+
+        user.save_to_db()
             
         try:
             game.save_to_db()
